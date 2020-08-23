@@ -1,6 +1,8 @@
 #!/usr/bin/env dotnet fsi
-// This is our first hello cloud script. This is a comment line.
-let hello message =
-    printfn "Hello %s!" message
+// Now with command line arguments!
 
-hello "cloud"
+let hello messages =
+    for message in messages do
+        printfn "Hello %s!" message
+
+hello fsi.CommandLineArgs
