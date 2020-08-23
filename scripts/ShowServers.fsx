@@ -18,7 +18,7 @@ type InstanceInfo =
       LaunchTime:       DateTime
       State:            string }
 
-      
+
 let rec getTagValue key (tags: Tag list) =
     match tags with
     | [] -> ""
@@ -37,6 +37,21 @@ let getInstanceInfo (instance: Instance) =
     }
 
 
+let yyyymmddhhmmss (dt: DateTime) =
+    dt.ToString ("yyyy-MM-dd HH:mm:ss")
+
+
+let printInstanceInfo (instanceInfos: InstanceInfo list) : unit =
+    if instanceInfos.IsEmpty then
+        printfn "No instance info available!"
+    else
+        printfn  "%-20s %-20s %-16s %-16s %-20s %-10s"
+            "InstanceId" "Name" "InstanceType" "Private IP" "LaunchTime" "State"
+        for ii in instanceInfos do
+            printfn "%-20s %-20s %-16s %-16s %-20s %-10s"
+                ii.InstanceId ii.Name ii.InstanceType ii.PrivateIpAddress (yyyymmddhhmmss ii.LaunchTime) ii.State
+
+
 let getInstances (reservations: Reservation list) =
     reservations |> List.collect (fun x -> List.ofSeq x.Instances)
 
@@ -53,10 +68,12 @@ let showServers (args: string[]) =
         do SetEnvironmentVariable ("AWS_PROFILE", args.[0])
     let client = new AmazonEC2Client()
     let response = (describeInstances client) |> Async.RunSynchronously
-    if response.Reservations.Count = 0 then
-        List.empty<Instance>
-    else
-        (List.ofSeq response.Reservations) |> getInstances
+    let infolist = 
+        if response.Reservations.Count = 0 then
+            List.empty<Instance>
+        else
+            (List.ofSeq response.Reservations) |> getInstances
+    infolist |> List.map getInstanceInfo |> printInstanceInfo
 
     
 showServers (fsi.CommandLineArgs |> Array.skip 1)
@@ -67,6 +84,7 @@ showServers (fsi.CommandLineArgs |> Array.skip 1)
   let mylist = List.ofSeq response.Reservations
   let response = showServers [| "erik" |]
   let iis = showServers [| "erik" |] |> List.map getInstanceInfo
+  showServers [| "erik" |] |> List.map getInstanceInfo |> printInstanceInfo 
   getInstanceInfo response.[0]
   let instance = response.[0]
   let tags = List.ofSeq instance.Tags
