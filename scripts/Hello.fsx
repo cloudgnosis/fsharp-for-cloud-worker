@@ -5,4 +5,4 @@ let hello messages =
     for message in messages do
         printfn "Hello %s!" message
 
-hello fsi.CommandLineArgs
+hello fsi.CommandLineArgs.[1..]
