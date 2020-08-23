@@ -1,7 +1,6 @@
 #!/usr/bin/env dotnet fsi
-// Now with command line arguments!
-
+  
 let hello messages =
     messages |> Array.map (printfn "Hello %s!")
 
-hello fsi.CommandLineArgs.[1..]
+hello (fsi.CommandLineArgs |> Array.skip 1)
