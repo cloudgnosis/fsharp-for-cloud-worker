@@ -2,7 +2,6 @@
 // Now with command line arguments!
 
 let hello messages =
-    for message in messages do
-        printfn "Hello %s!" message
+    messages |> Array.map (printfn "Hello %s!")
 
 hello fsi.CommandLineArgs.[1..]
