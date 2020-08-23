@@ -7,6 +7,9 @@ each version in blog posts.
 
 ## Part 1
 
-Hello cloud script:
+Scripts created:
 
 - scripts/Hello.fsx
+- scripts/HelloS3.fsx
+
+
