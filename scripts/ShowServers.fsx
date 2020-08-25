@@ -6,15 +6,18 @@
 
 open System
 open System.Environment
+open System.Text.RegularExpressions
 open Amazon.EC2
 open Amazon.EC2.Model
 
+type IpAddress = IpAddress of string
+let toString (IpAddress a)  = a
 
 type InstanceInfo =
     { InstanceId:       string
       Name:             string
       InstanceType:     string
-      PrivateIpAddress: string
+      PrivateIpAddress: IpAddress
       LaunchTime:       DateTime
       State:            string }
 
@@ -31,7 +34,7 @@ let getInstanceInfo (instance: Instance) =
         InstanceId = instance.InstanceId
         Name = getTagValue "Name" tags
         InstanceType = instance.InstanceType.Value
-        PrivateIpAddress = instance.PrivateIpAddress
+        PrivateIpAddress = IpAddress instance.PrivateIpAddress
         LaunchTime = instance.LaunchTime
         State = instance.State.Name.Value
     }
@@ -49,7 +52,7 @@ let printInstanceInfo (instanceInfos: InstanceInfo list) : unit =
             "InstanceId" "Name" "InstanceType" "Private IP" "LaunchTime" "State"
         for ii in instanceInfos do
             printfn "%-20s %-20s %-16s %-16s %-20s %-10s"
-                ii.InstanceId ii.Name ii.InstanceType ii.PrivateIpAddress (yyyymmddhhmmss ii.LaunchTime) ii.State
+                ii.InstanceId ii.Name ii.InstanceType (toString ii.PrivateIpAddress) (yyyymmddhhmmss ii.LaunchTime) ii.State
 
 
 let getInstances (reservations: Reservation list) =
