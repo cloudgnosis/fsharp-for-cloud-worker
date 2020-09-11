@@ -19,3 +19,16 @@ Scripts created:
 
 - scripts/ShowServers.fsx
   
+## Part 3
+
+Projects created:
+
+- HelloLambda
+- HelloLambda.Tests
+
+## Part 4 
+
+Projects created:
+
+- DetectImageLabels
+- DetectImageLabels.Tests
