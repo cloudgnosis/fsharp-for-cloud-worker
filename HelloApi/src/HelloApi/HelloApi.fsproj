@@ -12,8 +12,10 @@
 
   <ItemGroup>
     <!-- CDK Construct Library dependencies -->
-    <PackageReference Include="Amazon.CDK" Version="1.63.0" />
-    <PackageReference Include="Amazon.CDK.AWS.Lambda" Version="1.63.0" />
+    <PackageReference Include="Amazon.CDK" Version="1.64.1" />
+    <PackageReference Include="Amazon.CDK.AWS.ApiGateway" Version="1.64.1" />
+    <PackageReference Include="Amazon.CDK.AWS.DynamoDB" Version="1.64.1" />
+    <PackageReference Include="Amazon.CDK.AWS.Lambda" Version="1.64.1" />
 
     <!-- jsii Roslyn analyzers (un-comment to obtain compile-time checks for missing required props     -->
     <PackageReference Include="Amazon.Jsii.Analyzers" Version="*" PrivateAssets="all" />
