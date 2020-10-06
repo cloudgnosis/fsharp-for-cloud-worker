@@ -2,12 +2,17 @@ namespace HelloApi
 
 open System
 open Amazon.CDK
+open Amazon.CDK.AWS.APIGateway
+open Amazon.CDK.AWS.DynamoDB
 open Amazon.CDK.AWS.Lambda
 open Amazon.CDK.AWS.Logs
-open Amazon.CDK.AWS.APIGateway
+
 
 type HelloApiStack(scope, id, props) as this =
     inherit Stack(scope, id, props)
+
+    let tableProps = TableProps (PartitionKey = Attribute(Name = "path", Type = AttributeType.STRING))
+    let table = Table(this, "msgdata-table", tableProps)
 
     let funcProps =
         FunctionProps(Runtime = Runtime.DOTNET_CORE_3_1,
@@ -15,10 +20,13 @@ type HelloApiStack(scope, id, props) as this =
                       Handler = "Backend::Backend.Function::FunctionHandler",
                       Description = "Our backend Lambda function",
                       MemorySize = Nullable<float>(256.0),
+                      Timeout = Duration.Seconds(10.0),
                       LogRetention = Option.toNullable (Some RetentionDays.ONE_WEEK))
 
     let backend =
         Function(this, "Backend-function", funcProps)
+    do backend.AddEnvironment ("TABLE_NAME", table.TableName) |> ignore
+       table.GrantReadWriteData (backend) |> ignore
 
     let apiProps =
         LambdaRestApiProps
