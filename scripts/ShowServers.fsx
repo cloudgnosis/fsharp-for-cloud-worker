@@ -1,4 +1,4 @@
-#!/usr/bin/env dotnet fsi --langversion:preview
+#!/usr/bin/env dotnet fsi
 
 // Get the AWS SDK packages needed
 #r "nuget: AWSSDK.Core"
